@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Snow Falls</title>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                height: 100vh;
+                overflow: hidden;
+                font-family: 'Arial', sans-serif;
+                background-color: #f0f8ff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+            }
+
+            .background-image {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                background-image: url("https://dl.dropbox.com/scl/fi/p1zjqg1mhsxck71uznlby/WinterNight.jpeg?rlkey=0hs31b1pfpk0m5a6mx0tcvxzi&st=bqcrz9ir&dl=1");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+            }
+
+            .snowflake-area {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                z-index: 10;
+            }
+
+            .snowflake {
+                position: absolute;
+                top: -20%;
+                aspect-ratio: 1;
+                border-radius: 50%;
+                background-color: snow;
+                animation: snowfall 10s linear infinite;
+                z-index: 10;
+            }
+
+            @keyframes snowfall {
+                0% {
+                    transform: translateY(0) rotate(0);
+                }
+                100% {
+                    transform: translateY(110vh) rotate(360deg);
+                }
+            }
+
+            /* Styling for the New Year message */
+            .new-year-message {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                color: #fff;
+                font-size: 0.8rem; /* Even smaller text size */
+                font-weight: 400;
+                background: rgba(0, 0, 0, 0.6);
+                padding: 10px;
+                border-radius: 10px; /* Square shape with rounded corners */
+                width: 180px; /* Fixed width to make it square */
+                height: 180px; /* Fixed height to make it square */
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                font-family: 'Courier New', Courier, monospace;
+                line-height: 1.2;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            .new-year-message span {
+                display: block;
+                margin-top: 5px;
+                font-size: 0.7rem; /* Smaller font size for subtext */
+                color: #ffcccb;
+                font-style: italic;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="snowflake-area"></div>
+        <div class="background-image"></div>
+        <div class="new-year-message">
+            "New beginnings, fresh snow, and endless possibilities. Wishing you a year full of happiness and love. 
+            <span>Happy New Year!</span>"
+        </div>
+
+        <script>
+            const getSnowflakeCount = () => {
+                let width = window.screen.width;
+
+                if (width < 768) return 1000;
+                if (width < 1024) return 1500;
+
+                return 2000;
+            };
+
+            const letItSnow = () => {
+                const snowflakeArea = document.querySelector(".snowflake-area");
+
+                for (let i = 0; i < getSnowflakeCount(); i++) {
+                    const snowflake = document.createElement("div");
+                    snowflake.classList.add("snowflake");
+
+                    const randomSize = Math.random() * 4 + 1;
+                    const randomDuration = Math.random() * 11 + 4;
+                    const randomXPosition = Math.random() * 100;
+                    const randomDelay = Math.random() * 6;
+                    const randomOpacity = Math.random() * 0.2 + 0.4;
+
+                    snowflake.style.left = `${randomXPosition}%`;
+                    snowflake.style.animationDuration = `${randomDuration}s`;
+                    snowflake.style.width = `${randomSize}px`;
+                    snowflake.style.animationDelay = `${randomDelay}s`;
+                    snowflake.style.opacity = `${randomOpacity}`;
+
+                    snowflakeArea.appendChild(snowflake);
+                }
+            };
+
+            letItSnow();
+        </script>
+
+        <!-- Audio -->
+        <script>
+            var url = 'https://dl.dropboxusercontent.com/scl/fi/yqby90qapq8xbrqlyasfp/alan-walker.mp3?rlkey=1wvnet9u55o840n8jgnv5mdiv&st=50f17991'; // Updated URL
+            window.AudioContext = window.AudioContext || window.webkitAudioContext; //fix up prefixing
+            var context = new AudioContext(); //context
+            var source = context.createBufferSource(); //source node
+            source.connect(context.destination); //connect source to speakers so we can hear it
+            var request = new XMLHttpRequest();
+            request.open('GET', url, true); 
+            request.responseType = 'arraybuffer'; //the response is an array of bits
+            request.onload = function() {
+                context.decodeAudioData(request.response, function(response) {
+                    source.buffer = response;
+                    source.start(0); //play audio immediately
+                    source.loop = true;
+                }, function () { console.error('The request failed.'); } );
+            }
+            request.send();
+        </script>
+    </body>
+</html>
